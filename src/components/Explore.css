@@ -1,0 +1,27 @@
+/* src/components/Explore.css */
+.manga-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .manga-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    width: 150px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .manga-cover {
+    width: 100%;
+    height: auto;
+  }
+  
+  .manga-title {
+    padding: 8px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
