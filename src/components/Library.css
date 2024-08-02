@@ -1,0 +1,49 @@
+/* src/components/Library.css */
+.library {
+    padding: 20px;
+  }
+  
+  .library h2 {
+    margin-bottom: 20px;
+  }
+  
+  .library p {
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .manga-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .manga-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 150px;
+    text-align: center;
+  }
+  
+  .manga-cover {
+    width: 100%;
+    height: auto;
+  }
+  
+  .manga-card h3 {
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  
+  .details-link {
+    display: block;
+    margin: 10px 0;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .details-link:hover {
+    text-decoration: underline;
+  }
+  

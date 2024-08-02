@@ -2,12 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './MangaDetails.css'; // Importe o arquivo CSS
+import { addToLibrary, removeFromLibrary, isInLibrary } from './libraryUtils';
 
-const MangaDetails = () => {
+const MangaDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [mangaDetails, setMangaDetails] = useState<any>(null);
   const [chapters, setChapters] = useState<any[]>([]);
   const [coverUrl, setCoverUrl] = useState<string>('');
+  const [inLibrary, setInLibrary] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchMangaDetails = async () => {
@@ -34,8 +36,22 @@ const MangaDetails = () => {
       }
     };
 
-    fetchMangaDetails();
+    if (id) {
+      fetchMangaDetails();
+      setInLibrary(isInLibrary(id));
+    }
   }, [id]);
+
+  const handleLibraryToggle = () => {
+    if (id) {
+      if (inLibrary) {
+        removeFromLibrary(id);
+      } else {
+        addToLibrary({ id, title: mangaDetails.attributes.title.en, coverUrl });
+      }
+      setInLibrary(!inLibrary);
+    }
+  };
 
   if (!mangaDetails) return <div>Loading...</div>;
 
@@ -46,6 +62,9 @@ const MangaDetails = () => {
         <div className="manga-info">
           <h1>{mangaDetails.attributes.title['pt-br'] || mangaDetails.attributes.title.en}</h1>
           <p>{mangaDetails.attributes.description['pt-br'] || mangaDetails.attributes.description.en}</p>
+          <button onClick={handleLibraryToggle}>
+            {inLibrary ? 'Remover da Biblioteca' : 'Adicionar à Biblioteca'}
+          </button>
         </div>
       </div>
       <h2>Capítulos</h2>

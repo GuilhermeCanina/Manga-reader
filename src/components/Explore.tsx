@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import './Explore.css'; // Certifique-se de criar este arquivo CSS para estilizar
 
 interface Manga {
   id: string;
@@ -49,25 +50,27 @@ const Explore: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="explore-container">
+      <h1>Explorar</h1>
       <input
         type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="Search for manga..."
+        className="search-input"
       />
-      <button onClick={handleSearch}>Search</button>
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <button onClick={handleSearch} className="search-button">Search</button>
+      <div className="manga-grid">
         {mangaData.map(manga => (
-          <div key={manga.id} style={{ margin: '10px', padding: '10px', border: '1px solid #ccc' }}>
+          <div key={manga.id} className="manga-item">
             {manga.fileName ? (
               <img
                 src={`https://uploads.mangadex.org/covers/${manga.id}/${manga.fileName}.256.jpg`}
                 alt={manga.title}
-                style={{ width: '100px', height: '150px' }}
+                className="manga-cover"
               />
             ) : (
-              <div style={{ width: '100px', height: '150px', backgroundColor: '#f0f0f0' }}>No Image</div>
+              <div className="no-image">No Image</div>
             )}
             <p>{manga.title}</p>
             <Link to={`/manga/${manga.id}`}>View Details</Link>
