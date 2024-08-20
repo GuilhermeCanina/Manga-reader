@@ -1,0 +1,25 @@
+.manga-reader-options {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .manga-reader-options button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  
+  .manga-reader-options button:hover {
+    background-color: #0056b3;
+  }
+  

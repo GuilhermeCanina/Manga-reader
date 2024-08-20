@@ -1,5 +1,15 @@
-.manga-details {
+.manga-details-container {
   padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cover-image {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .manga-header {
@@ -18,12 +28,18 @@
 }
 
 .chapter-list {
-  list-style: none;
+  list-style-type: none;
   padding: 0;
 }
 
 .chapter-item {
   margin: 10px 0;
+}
+
+.chapter-item a {
+  text-decoration: none;
+  color: blue;
+  display: block;
 }
 
 .pagination {

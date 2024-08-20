@@ -1,11 +1,15 @@
-// src/components/Options.tsx
 import React from 'react';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Options: React.FC = () => {
+  const { darkMode, toggleDarkMode } = useTheme();
+
   return (
     <div>
-      <h2>Opções</h2>
-      {/* Adicionar funcionalidades de configurações */}
+      <h1>Opções</h1>
+      <button onClick={toggleDarkMode}>
+        {darkMode ? 'Alternar para Modo Claro' : 'Alternar para Modo Escuro'}
+      </button>
     </div>
   );
 };

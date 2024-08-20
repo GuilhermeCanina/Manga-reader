@@ -1,0 +1,26 @@
+.manga-reader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .image-size-selector {
+    margin-bottom: 20px;
+  }
+  
+  .manga-page {
+    margin-bottom: 20px;
+  }
+  
+  .manga-page.small {
+    width: 50%;
+  }
+  
+  .manga-page.medium {
+    width: 70%;
+  }
+  
+  .manga-page.large {
+    width: 100%;
+  }
+  

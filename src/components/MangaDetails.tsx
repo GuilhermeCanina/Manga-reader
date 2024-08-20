@@ -1,82 +1,109 @@
-// src/components/MangaDetails.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import './MangaDetails.css'; // Importe o arquivo CSS
+import './MangaDetails.css'; // Certifique-se de criar este arquivo CSS para estilizar
 import { addToLibrary, removeFromLibrary, isInLibrary } from './libraryUtils';
+import MangaReader from './MangaReader';
 
 const MangaDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [mangaDetails, setMangaDetails] = useState<any>(null);
+  const [manga, setManga] = useState<any>(null);
   const [chapters, setChapters] = useState<any[]>([]);
-  const [coverUrl, setCoverUrl] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalChapters, setTotalChapters] = useState(0);
   const [inLibrary, setInLibrary] = useState<boolean>(false);
+
+  const chaptersPerPage = 25;
 
   useEffect(() => {
     const fetchMangaDetails = async () => {
       try {
-        const mangaResponse = await fetch(`https://api.mangadex.org/manga/${id}`);
-        const mangaData = await mangaResponse.json();
-        setMangaDetails(mangaData.data);
-
-        const coverArt = mangaData.data.relationships.find((rel: any) => rel.type === 'cover_art');
-        if (coverArt) {
-          const coverResponse = await fetch(`https://api.mangadex.org/cover/${coverArt.id}`);
-          const coverData = await coverResponse.json();
-          const coverFileName = coverData.data.attributes.fileName;
-          setCoverUrl(`https://uploads.mangadex.org/covers/${id}/${coverFileName}.512.jpg`);
-        } else {
-          setCoverUrl('https://via.placeholder.com/200x300?text=No+Image'); // URL de imagem placeholder
-        }
-
-        const chaptersResponse = await fetch(`https://api.mangadex.org/manga/${id}/feed?translatedLanguage[]=pt-br&order[chapter]=asc`);
-        const chaptersData = await chaptersResponse.json();
-        setChapters(chaptersData.data);
+        const response = await axios.get(`https://api.mangadex.org/manga/${id}`, {
+          params: {
+            includes: ['cover_art'],
+          },
+        });
+        setManga(response.data.data);
       } catch (error) {
-        console.error('Error fetching manga details:', error);
+        console.error('Erro ao buscar os detalhes do mangá:', error);
+      }
+    };
+
+    const fetchChapters = async () => {
+      try {
+        const response = await axios.get('https://api.mangadex.org/chapter', {
+          params: {
+            manga: id,
+            translatedLanguage: ['pt-br'], // Idioma Português do Brasil
+            limit: chaptersPerPage,
+            offset: (currentPage - 1) * chaptersPerPage,
+          },
+        });
+        setChapters(response.data.data);
+        setTotalChapters(response.data.total);
+      } catch (error) {
+        console.error('Erro ao buscar os capítulos do mangá:', error);
       }
     };
 
     if (id) {
       fetchMangaDetails();
+      fetchChapters();
       setInLibrary(isInLibrary(id));
     }
-  }, [id]);
+  }, [id, currentPage]);
 
   const handleLibraryToggle = () => {
     if (id) {
       if (inLibrary) {
         removeFromLibrary(id);
       } else {
-        addToLibrary({ id, title: mangaDetails.attributes.title.en, coverUrl });
+        addToLibrary({ id, title: manga.attributes.title.en, coverUrl: manga.attributes.coverUrl });
       }
       setInLibrary(!inLibrary);
     }
   };
 
-  if (!mangaDetails) return <div>Loading...</div>;
+  if (!manga) {
+    return <div>Carregando...</div>;
+  }
+
+  const coverFileName = manga.relationships.find((rel: any) => rel.type === 'cover_art')?.attributes.fileName;
+  const coverUrl = coverFileName
+    ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFileName}`
+    : '';
+
+  const totalPages = Math.ceil(totalChapters / chaptersPerPage);
 
   return (
-    <div className="manga-details">
-      <div className="manga-header">
-        <img src={coverUrl} alt={`${mangaDetails.attributes.title.en} cover`} className="manga-cover" />
-        <div className="manga-info">
-          <h1>{mangaDetails.attributes.title['pt-br'] || mangaDetails.attributes.title.en}</h1>
-          <p>{mangaDetails.attributes.description['pt-br'] || mangaDetails.attributes.description.en}</p>
-          <button onClick={handleLibraryToggle}>
-            {inLibrary ? 'Remover da Biblioteca' : 'Adicionar à Biblioteca'}
-          </button>
-        </div>
-      </div>
+    <div className="manga-details-container">
+      <img src={coverUrl} alt={manga.attributes.title.en} className="cover-image" />
+      <h1>{manga.attributes.title.en}</h1>
+      <p>{manga.attributes.description.en}</p>
+      <button onClick={handleLibraryToggle}>
+        {inLibrary ? 'Remover da Biblioteca' : 'Adicionar à Biblioteca'}
+      </button>
       <h2>Capítulos</h2>
       <ul className="chapter-list">
-        {chapters.map(chapter => (
+        {chapters.map((chapter) => (
           <li key={chapter.id} className="chapter-item">
             <Link to={`/manga/${id}/chapter/${chapter.id}`}>
-              Capítulo {chapter.attributes.chapter}: {chapter.attributes.title}
+              {chapter.attributes.title || `Capítulo ${chapter.attributes.chapter}`}
             </Link>
           </li>
         ))}
       </ul>
+      <div className="pagination">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => setCurrentPage(index + 1)}
+            className={index + 1 === currentPage ? 'active' : ''}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
