@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import './MangaDetails.css'; // Certifique-se de criar este arquivo CSS para estilizar
+import './MangaDetails.css';
 import { addToLibrary, removeFromLibrary, isInLibrary } from './libraryUtils';
 import MangaReader from './MangaReader';
 
@@ -34,7 +34,7 @@ const MangaDetails: React.FC = () => {
         const response = await axios.get('https://api.mangadex.org/chapter', {
           params: {
             manga: id,
-            translatedLanguage: ['pt-br'], // Idioma Português do Brasil
+            translatedLanguage: ['pt-br'],
             limit: chaptersPerPage,
             offset: (currentPage - 1) * chaptersPerPage,
           },
@@ -53,12 +53,17 @@ const MangaDetails: React.FC = () => {
     }
   }, [id, currentPage]);
 
-  const handleLibraryToggle = () => {
-    if (id) {
+  const handleLibraryToggle = async () => {
+    if (id && manga) {
+      const coverFileName = manga.relationships.find((rel: any) => rel.type === 'cover_art')?.attributes.fileName;
+      const coverUrl = coverFileName
+        ? `https://uploads.mangadex.org/covers/${manga.id}/${coverFileName}`
+        : '';
+      
       if (inLibrary) {
         removeFromLibrary(id);
       } else {
-        addToLibrary({ id, title: manga.attributes.title.en, coverUrl: manga.attributes.coverUrl });
+        await addToLibrary({ id, title: manga.attributes.title.en, coverUrl });
       }
       setInLibrary(!inLibrary);
     }

@@ -1,15 +1,31 @@
+import axios from 'axios';
+
 interface Manga {
   id: string;
   title: string;
   coverUrl: string;
 }
 
-export const addToLibrary = (manga: Manga) => {
+export const addToLibrary = async (manga: Manga) => {
   let library = JSON.parse(localStorage.getItem('library') || '[]');
+
+  // Verificar se a URL da capa está vazia e buscar na API se necessário
+  if (!manga.coverUrl) {
+    const coverFileName = await getCoverUrl(manga.id);
+    manga.coverUrl = `https://uploads.mangadex.org/covers/${manga.id}/${coverFileName}`;
+  }
+
   if (!library.some((item: Manga) => item.id === manga.id)) {
     library.push(manga);
     localStorage.setItem('library', JSON.stringify(library));
   }
+};
+
+// Função auxiliar para buscar o nome da capa na API do MangaDex
+const getCoverUrl = async (mangaId: string): Promise<string> => {
+  const response = await axios.get(`https://api.mangadex.org/manga/${mangaId}`);
+  const coverFileName = response.data.data.relationships.find((rel: any) => rel.type === 'cover_art')?.attributes.fileName;
+  return coverFileName;
 };
 
 export const removeFromLibrary = (id: string) => {

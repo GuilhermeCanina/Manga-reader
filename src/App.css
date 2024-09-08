@@ -67,3 +67,52 @@ nav a {
 nav a:hover {
   text-decoration: underline;
 }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #121212; 
+  color: #ffffff; 
+}
+
+
+* {
+  box-sizing: border-box;
+  border: none;
+}
+
+
+.App {
+  min-height: 100vh; 
+  background-color: #121212; 
+  color: #ffffff; 
+}
+
+.nav {
+  background-color: #1f1f1f; 
+}
+
+.nav a {
+  color: #ffffff; 
+  text-decoration: none;
+}
+
+.nav a:hover {
+  color: #61dafb; 
+}
+
+
+img {
+  border: none;
+}
+
+.container {
+  background-color: #1e1e1e; 
+  }
+
+
+footer, header, .footer, .header {
+  background-color: #1f1f1f;
+  color: #ffffff;
+}

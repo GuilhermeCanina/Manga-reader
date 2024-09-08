@@ -1,14 +1,19 @@
-// src/components/Library.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './Library.css'; // Importe um arquivo CSS para estilização
+import './Library.css';
 import { getLibrary } from './libraryUtils';
 
 const Library: React.FC = () => {
   const [library, setLibrary] = useState<any[]>([]);
 
   useEffect(() => {
-    setLibrary(getLibrary());
+    // Chamada assíncrona para carregar a biblioteca
+    const fetchLibrary = async () => {
+      const fetchedLibrary = await getLibrary();
+      setLibrary(fetchedLibrary);
+    };
+
+    fetchLibrary();
   }, []);
 
   return (
@@ -20,7 +25,12 @@ const Library: React.FC = () => {
         <div className="manga-grid">
           {library.map(manga => (
             <div key={manga.id} className="manga-card">
-              <img src={manga.coverUrl} alt={manga.title} className="manga-cover" />
+              {/* Exibe a capa se disponível, caso contrário, um placeholder */}
+              <img 
+                src={manga.coverUrl || '/path-to-placeholder-image.jpg'} 
+                alt={manga.title} 
+                className="manga-cover" 
+              />
               <h3>{manga.title}</h3>
               <Link to={`/manga/${manga.id}`} className="details-link">Ver Detalhes</Link>
             </div>
