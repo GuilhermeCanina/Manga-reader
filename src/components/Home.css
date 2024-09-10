@@ -1,0 +1,92 @@
+/* Estilos globais */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Contêiner principal da página */
+  .home-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Estilo do banner */
+  .banner {
+    background-color: #6e4bc8;
+    color: white;
+    padding: 40px;
+    text-align: center;
+  }
+  
+  .banner h1 {
+    font-size: 36px;
+    margin: 0;
+  }
+  
+  .banner p {
+    font-size: 18px;
+  }
+  
+  /* Estilo da seção de recomendações e novidades */
+  .recommendations, .latest {
+    margin-top: 40px;
+  }
+  
+  .recommendations h2, .latest h2 {
+    font-size: 24px;
+    color: #333;
+  }
+  
+  /* Estilo da lista de mangás */
+  .manga-list {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .manga-item {
+    width: 150px;
+    text-align: center;
+  }
+  
+  .manga-item img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .manga-item p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+.banner {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  text-decoration: none;
+  color: white;
+}
+
+.banner-info {
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  padding: 20px;
+}
+
+.banner-info h1 {
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.banner-info p {
+  margin: 0;
+  font-size: 1.2rem;
+}
