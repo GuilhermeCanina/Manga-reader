@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Explore.css'; // Certifique-se de criar este arquivo CSS para estilizar
+import './Explore.css';
 
 interface Manga {
   id: string;

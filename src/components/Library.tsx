@@ -7,7 +7,7 @@ const Library: React.FC = () => {
   const [library, setLibrary] = useState<any[]>([]);
 
   useEffect(() => {
-    // Chamada assíncrona para carregar a biblioteca
+   
     const fetchLibrary = async () => {
       const fetchedLibrary = await getLibrary();
       setLibrary(fetchedLibrary);
@@ -25,7 +25,6 @@ const Library: React.FC = () => {
         <div className="manga-grid">
           {library.map(manga => (
             <div key={manga.id} className="manga-card">
-              {/* Exibe a capa se disponível, caso contrário, um placeholder */}
               <img 
                 src={manga.coverUrl || '/path-to-placeholder-image.jpg'} 
                 alt={manga.title} 
